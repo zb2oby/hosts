@@ -191,7 +191,7 @@ do_startup_config() {
 	#creation du service systemd
 
 	if test ! -f /etc/systemd/system/hosts.service; then
-    		sudo cp hosts.service.txt /etc/systemd/system/hosts.service
+    		sudo cp hosts.service /etc/systemd/system/hosts.service
     		sudo chmod +x /etc/systemd/system/hosts.service
     		sudo systemctl enable hosts.service > /dev/null
     	else
@@ -293,9 +293,9 @@ do_startup_config
 user=$(logname)
 if test ! -d /home/"$user"/hosts; then
     mkdir /home/"$user"/hosts
-	mv Readme.txt /home/"$user"/hosts/Readme.txt
+	mv Readme.md /home/"$user"/hosts/Readme.md
 	mv hosts.sh /home/"$user"/hosts/hosts.sh
-	mv hosts.service.txt /home/"$user"/hosts/hosts.service.txt
+	mv hosts.service /home/"$user"/hosts/hosts.service
 fi
 
 sleep 1
