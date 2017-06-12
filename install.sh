@@ -293,7 +293,7 @@ do_startup_config
 user=$(logname)
 if test ! -d /home/"$user"/hosts; then
     mkdir /home/"$user"/hosts
-	mv Readme.md /home/"$user"/hosts/Readme.md
+	mv README.md /home/"$user"/hosts/README.md
 	mv hosts.sh /home/"$user"/hosts/hosts.sh
 	mv hosts.service /home/"$user"/hosts/hosts.service
 fi
