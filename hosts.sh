@@ -24,10 +24,10 @@ if [ "x$SSID" = "xlili" ]
 then
 #coupledebut
 #couple1debut
-sudo sed -i '/#mesdomainesdebut/ a\23232323 mlkmlklmk' /etc/hosts | sudo tee --append /etc/hosts > /dev/null
+sudo sed -i '/#mesdomainesdebut/ a\$ip1 $domaine1' /etc/hosts | sudo tee --append /etc/hosts > /dev/null
 #couple1fin
 #couple2debut
-sudo sed -i '/#mesdomainesdebut/ a\56565656 hjhjhh' /etc/hosts | sudo tee --append /etc/hosts > /dev/null
+sudo sed -i '/#mesdomainesdebut/ a\$ip2 $domaine2' /etc/hosts | sudo tee --append /etc/hosts > /dev/null
 #couple2fin
 #couplefin
 fi
