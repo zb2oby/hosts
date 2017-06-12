@@ -1,0 +1,16 @@
+[Unit]
+Description= hosts
+Wants=network-online.target
+After=network-online.target
+
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/hosts start
+ExecStop=/usr/bin/hosts stop
+RestartSec=60
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
