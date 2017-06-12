@@ -43,9 +43,13 @@ le script est donc livré avec un utilitaire d'installation lors de laquelle vou
 INSTALLATION
 
 1/Decompressez l'archive.
+
 2/Placez vous dans le dossier où se trouvent les fichiers decompressés
+
 3/Executez dans un terminal le script d'installation EN SUPERUTILISATEUR avec la commande :sudo bash install.sh
+
 4/Suivez les instructions.
+
 
 
 
