@@ -1,6 +1,23 @@
 # hosts
 Script in bash writing personal DNS resolutions in /etc/hosts 
 
+
+
+DEPENDANCES ET DROITS : 
+
+Ce script necessite au minimum : 
+- Wireless-tools ou network-manager
+- ethtool
+
+ce script execute des commandes nécessitant les droits superutilisateur. 
+assurez vous d'avoir les droits suffisants avant de commencer.
+
+Vous executez ce script à vos risque et perils, je ne pourrait pas être tenu pour responsable
+d'un quelquoncque dysfontcionnement à l'issue de son execution.
+rassurez vous il n'y à rien de bien compliqué dans ce script mais bon hein histoire de dire quoi..
+si vous n'avez pas confiance et bien...n'executez pas ce script...ou dechiffrez le ;-)
+
+
 PRESENTATION
 
 Le but de ce petit programme est de modifier la resolution DNS dans le /etc/hosts de votre machine afin d'acceder à vos serveurs avec la même adresse en interne et en externe
@@ -25,29 +42,10 @@ le script est donc livré avec un utilitaire d'installation lors de laquelle vou
 
 INSTALLATION
 
-ATTENTION !! 
-
-ce script execute des commandes necessitant les droits superutilisateur. 
-assurez vous d'avoir les droits suffisants avant de commencer.
-
-Vous executez ce script à vos risque et perils, je ne pourrait pas être tenu pour responsable
-d'un quelquoncque dysfontcionnement à l'issue de son execution.
-rassurez vous il n'y à rien de bien compliqué dans ce script mais bon hein histoire de dire quoi..
-si vous n'avez pas confiance et bien...n'executez pas ce script...ou dechiffrez le ;-)
-
-
 1/Decompressez l'archive.
 2/Placez vous dans le dossier où se trouvent les fichiers decompressés
 3/Executez dans un terminal le script d'installation EN SUPERUTILISATEUR avec la commande :sudo bash install.sh
 4/Suivez les instructions.
-
-
-PROBLEMES EVENTUELS
-
-Si le script d'installation donne des erreurs en fin d'execution avec les commande "mv" et "cp" il est possible que votre distribution n'ai pas de dossier /home/$USER/.config
-je n'ai pas encore pu tester le fonctionnement en inventant ce dossier mais vous pouvez essayer..
-
-Cela doit fonctionner pour la plupart des environnements les plus répendus (gnome/kde/LXDE)
 
 
 
