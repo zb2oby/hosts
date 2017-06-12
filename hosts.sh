@@ -20,7 +20,7 @@ do_start()  {
             SSID=$(sudo iwconfig 2> /dev/null | grep -o 'ESSID:.*' | cut -d '"' -f 2)
 
 #connexions
-if [ "x$SSID" = "xlili" ]
+if [ "x$SSID" = "xmabox1" ]
 then
 #coupledebut
 #couple1debut
