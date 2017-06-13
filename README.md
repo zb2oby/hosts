@@ -2,9 +2,8 @@
 Script in bash writing personal DNS resolutions in /etc/hosts 
 
 
-
 DEPENDANCES ET DROITS : 
-
+========================
 Ce script necessite au minimum : 
 - Wireless-tools ou network-manager
 - ethtool
@@ -18,8 +17,9 @@ rassurez vous il n'y à rien de bien compliqué dans ce script mais bon hein his
 si vous n'avez pas confiance et bien...n'executez pas ce script...ou dechiffrez le ;-)
 
 
-PRESENTATION
 
+PRESENTATION
+=============
 Le but de ce petit programme est de modifier la resolution DNS dans le /etc/hosts de votre machine afin d'acceder à vos serveurs avec la même adresse en interne et en externe
 Finalement cela revient à realiser un NAT loopback (ou hairpinning) manuellement
 Jusque là rien de nouveau et ecrire dans le /etc/hosts ne necessite pas un script me direz-vous
@@ -38,10 +38,8 @@ ainsi plus besoin de penser à modifier manuellement la resolution DNS
 
 le script est donc livré avec un utilitaire d'installation lors de laquelle vous pourrez renseigner toute les informations necessaire à sa future bonne execution.
 
-
-
 INSTALLATION
-
+===============
 1/Decompressez l'archive.
 
 2/Placez vous dans le dossier où se trouvent les fichiers decompressés
