@@ -11,11 +11,6 @@ Ce script necessite au minimum :
 ce script execute des commandes nécessitant les droits superutilisateur. 
 assurez vous d'avoir les droits suffisants avant de commencer.
 
-Vous executez ce script à vos risque et perils, je ne pourrait pas être tenu pour responsable
-d'un quelquoncque dysfontcionnement à l'issue de son execution.
-rassurez vous il n'y à rien de bien compliqué dans ce script mais bon hein histoire de dire quoi..
-si vous n'avez pas confiance et bien...n'executez pas ce script...ou dechiffrez le ;-)
-
 
 
 PRESENTATION
