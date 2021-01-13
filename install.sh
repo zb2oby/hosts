@@ -137,7 +137,7 @@ do_couple() {
   done
 
   sleep 1
-  echo -e "\033[32mLes deux couples IP/DOMAINES ont bien été paramétrés \n"
+  echo -e "\033[32mLes couples IP/DOMAINES ont bien été paramétrés \n"
 }
 #fin de fonction do_couple
 

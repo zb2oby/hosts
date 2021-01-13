@@ -20,6 +20,7 @@ do_start()  {
       #connexions
       if [ "x$SSID" = "xmabox1" ]
       then
+        #couples
         #couplesdebut
         sudo sed -i '/#mesdomainesdebut/ a\$ip1 $domaine1' /etc/hosts | sudo tee --append /etc/hosts > /dev/null
         sudo sed -i '/#mesdomainesdebut/ a\$ip2 $domaine2' /etc/hosts | sudo tee --append /etc/hosts > /dev/null
