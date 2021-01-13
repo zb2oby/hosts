@@ -103,51 +103,41 @@ do_couple() {
 	# Renseigner l'ip et le ou les domaines à reecrire dans le vhosts
 	echo -e "\n\033[31m3/ ENREGISTREMENT DES COUPLES IP/DOMAINE"
 	sleep 1
-	echo -e "\033[32mVous pouvez renseigner deux couples IP/DOMAINE maximum \n"
-	sleep 1
-	echo -e "\033[33mIndiquer la premiere IP Locale\033[0m"
-	read -r ip0
-	sleep 1
-	echo -e "\033[33mIndiquer le domaine relié à la premiere IP Locale\033[0m"
-	read -r dom0
-	sleep 1
-	echo -e "\033[33mY aura t'il un autre couple IP/DOMAINE ? o/n\033[0m"
-	read -r oui0
+	echo -e "\033[32mVous pouvez renseigner autant de couples IP/DOMAINE que desiré \n"
 
-	if [ "x$oui0" != "xo" ]; then
-    		#suppression et recreation des lignes existentes
-    		sudo sed -i '/#couple1debut/,/#couple1fin/d' hosts.sh
-    		sudo sed -i '/#couple2debut/,/#couple2fin/d' hosts.sh
-    		sudo sed -i '/#coupledebut/ a\#couple1debut' hosts.sh
-    		sudo sed -i '/#couple1debut/ a\#couple1fin' hosts.sh
-    		sudo sed -i '/#couple1fin/ a\#couple2debut' hosts.sh
-    		sudo sed -i '/#couple2debut/ a\#couple2fin' hosts.sh
-    		#integration du nouveau couple
-    		sudo sed -i '/#couple1debut/ a\sudo sed \-i '\''/#mesdomainesdebut/ a\\'$ip0'\ '$dom0''\'' /etc/hosts \| sudo tee \-\-append /etc/hosts \> \/dev\/null' hosts.sh
-    		sleep 1
-    		echo -e "\033[32mLe couple IP/DOMAINE à bien été paramétré \n"
-	else
-    		echo -e "\033[33mIndiquer la seconde IP Locale\033[0m"
-    		read -r ip1
-    		sleep 1
-    		echo -e "\033[33mIndiquer le DOMAINE relié à la seconde IP Locale\033[0m"
-    		read -r dom1
-    		#suppression couple existant
-    		sudo sed -i '/#couple1debut/,/#couple1fin/d' hosts.sh
-    		sudo sed -i '/#couple2debut/,/#couple2fin/d' hosts.sh
-    		sudo sed -i '/#coupledebut/ a\#couple1debut' hosts.sh
-    		sudo sed -i '/#couple1debut/ a\#couple1fin' hosts.sh
-    		sudo sed -i '/#couple1fin/ a\#couple2debut' hosts.sh
-    		sudo sed -i '/#couple2debut/ a\#couple2fin' hosts.sh 
-    		#integration nouveaux couples
-    		sudo sed -i '/#couple1debut/ a\sudo sed \-i '\''/#mesdomainesdebut/ a\\'$ip0'\ '$dom0''\'' /etc/hosts \| sudo tee \-\-append /etc/hosts > /dev/null' hosts.sh
-    		sudo sed -i '/#couple2debut/ a\sudo sed \-i '\''/#mesdomainesdebut/ a\\'$ip1'\ '$dom1''\'' /etc/hosts \| sudo tee \-\-append /etc/hosts > /dev/null' hosts.sh
-    		sleep 1
-    		echo -e "\033[32mLes deux couples IP/DOMAINES ont bien été paramétrés \n"
+	#Tant qu'on desire ajouter des couples on rempli le fichier hosts.sh
+  while [ "x$oui0" != "xn" ]; do
 
-	fi
+      oui0="o"
 
+      if [ "x$oui0" = "xo" ]; then
+          #suppression des lignes existentes entre les balises couplesdebut et couplesfin
+    		  sudo sed -i '/#couplesdebut/,/#couplesfin/d' hosts.sh
+    		  #recréation des balises
+    		  sudo sed -i '/#couples/ a\#couplesdebut' hosts.sh
+    		  sudo sed -i '/#couplesdebut/ a\#couplesfin' hosts.sh
+          sleep 1
+          #enregistrement du couple
+	        echo -e "\033[33mIndiquer une IP Locale\033[0m"
+	        read -r ip0
+	        sleep 1
+          echo -e "\033[33mIndiquer un domaine relié à l'IP Locale\033[0m"
+          read -r dom0
+    		  #enregistrement du nouveau couple dans le tableau
+    		  sudo sed -i '/#couplesdebut/ a\sudo sed \-i '\''/#mesdomainesdebut/ a\\'$ip0'\ '$dom0''\'' /etc/hosts \| sudo tee \-\-append /etc/hosts \> \/dev\/null' hosts.sh | sudo tee --append hosts.sh > /dev/null
 
+      else
+        break
+      fi
+
+      sleep 1
+      echo -e "\033[33mY aura t'il un autre couple IP/DOMAINE ? o/n\033[0m"
+      read -r oui0
+
+  done
+
+  sleep 1
+  echo -e "\033[32mLes deux couples IP/DOMAINES ont bien été paramétrés \n"
 }
 #fin de fonction do_couple
 
