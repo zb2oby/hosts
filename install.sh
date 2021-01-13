@@ -227,7 +227,7 @@ sleep 1
 
 
 
-nmclis dev wifi list &> .nm.log
+nmcli dev wifi list &> .nm.log
 sudo iwlists scan &> .iw.log
 nm=$(< .nm.log sed 's/.* //')
 iw=$(< .iw.log sed 's/.* //')
@@ -267,7 +267,7 @@ cab=$(< .cab.log sed 's/.* //')
 
 if [ "x$cab" = "xintrouvable" ] || [ "x$cab" = "xfound" ];then
 
-    echo -e "\033[31mcertaines dépendances ne sont pas satisfaites \nle paramétrage de la liaison filaire necessite le paquet ethtool \n\033[0m"
+    echo -e "\033[31mcertaines dépendances ne sont pas satisfaites \nle paramétrage de la liaison filaire necessite le paquet ethtool ou net-tools \n\033[0m"
 
 else
 
@@ -290,26 +290,24 @@ do_startup_config
 
 
 #deplacement des fichiers telechargés
-user=$(logname)
-if test ! -d /home/"$user"/hosts; then
-    mkdir /home/"$user"/hosts
-	mv README.md /home/"$user"/hosts/README.md
-	mv hosts.sh /home/"$user"/hosts/hosts.sh
-	mv hosts.service /home/"$user"/hosts/hosts.service
+if test ! -d /opt/hosts; then
+    sudo mkdir /opt/hosts
+	sudo mv README.md /opt/hosts/README.md
+	sudo mv hosts.sh /opt/hosts/hosts.sh
+	sudo mv hosts.service /opt/hosts/hosts.service
 fi
 
 sleep 1
 
-echo -e "Vos réecritures de domaines sont désormais configurées, \nvous pouvez retrouver les fichiers dans le dossier 'hosts' situé dans votre 'home'\n"
+echo -e "Vos réecritures de domaines sont désormais configurées, \nvous pouvez retrouver les fichiers dans le dossier 'hosts' situé dans votre '/opt'\n"
 sleep 1
 echo -e "\033[31mun redémarrage de la session est nécessaire \n\033[31mAprès redemarrage assurez vous que /etc/hosts ai bien été écrit comme voulu \n \n\033[32mENJOY !!\033[0m"
 
-if test ! -f /home/"$user"/hosts/install.sh; then
-    	mv install.sh /home/"$user"/hosts/install.sh
+if test ! -f /opt/hosts/install.sh; then
+    	sudo mv install.sh /opt/hosts/install.sh
 
 fi
 
 
 
 exit
-

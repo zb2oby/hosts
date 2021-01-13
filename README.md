@@ -6,7 +6,7 @@ DEPENDANCES ET DROITS :
 ========================
 Ce script necessite au minimum : 
 - Wireless-tools ou network-manager
-- ethtool
+- ethtool ou net-tools
 
 ce script execute des commandes nécessitant les droits superutilisateur. 
 assurez vous d'avoir les droits suffisants avant de commencer.
