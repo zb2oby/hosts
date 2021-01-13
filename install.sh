@@ -2,61 +2,52 @@
 
 
 do_wifi() {
+      sleep 1
+      # recherche dans host.sh la ligne de if contenant les ssid
+      line0=$(sudo cat testhosts.sh | grep -o -n "SSID\" = " | cut -d : -f 1 | uniq)
 
-	#check si interface wifi existe
-	wifi=$(sudo iwconfig 2>/dev/null | grep 802.11 | cut -f1 -d' ')
-	if [ ! -z "$wifi" ]; then
-		    sleep 1
-        	echo -e "\033[33m\nIndiquez maintenant le SSID du principal reseau préféré (attention à la casse)\033[0m"
-        	read -r box
-        	sleep 1
-        	echo -e "\033[33mya t'il un autre reseau préféré ? o/n\033[0m"
-        	read -r oui
+      #suppression de la ligne
+      if [ "$line0" != "" ]; then
+          sudo sed -i "$line0"'d' testhosts.sh
+      fi
 
-        	if [ "x$oui" = "xo" ]; then
-            	# cas de deux SSID
-            	sleep 1
-            	echo -e "\033[33mindiquer le SSID du second réseau\033[0m"
-            	read -r box1
+      #tableazu des SSID
+      declare -a tableau_box
 
-            		# on supprime les eventuelle lignes existente contenant les deux ssid indiqués
-	        	line0=$(sudo cat hosts.sh | grep -o -n "SSID\" = " | cut -d : -f 1 | uniq)
+      #Tant qu'on desire ajouter des SSID on rempli le tableau
+      while [ "x$oui" != "xn" ]; do
 
-	        	if [ "$line0" != "" ]; then
-	            	sudo sed -i "$line0"'d' hosts.sh
+          oui="o"
 
-	        	fi
+          if [ "x$oui" = "xo" ]; then
+              sleep 1
+              echo -e "\033[33mindiquer le SSID du réseau\033[0m"
+              read -r box
+              tableau_box+=("$box")
+          else
+            break
+          fi
 
-            	# on integre dans le if les deux SSID indiqués
-            	sudo sed -i '/#connexions/ a\if [ \"x$SSID\" = \"x'$box'\" ] || [ \"x$SSID\" = \"x'$box1'\" ]' hosts.sh
-            	sleep 1
-            	echo -e "\033[32mVos réseaux ont bien été enregistré \n"
+          echo -e "\033[33mya t'il un autre reseau préféré ? o/n\033[0m"
+          read -r oui
 
-        	# cas d'un seul SSID
+      done
 
-		else
-
-	        	# on supprime les eventuelles lignes existentes contenants le ssid indiqué
-	        	line1=$(sudo cat hosts.sh | grep -o -n "SSID\" = " | cut -d : -f 1 | uniq)
-
-	        	if [ "$line1" != "" ]; then
-	            	sudo sed -i "$line1"'d' hosts.sh
-
-	        	fi
-
-            	#on integre dans le if le SSID unique indiqué
-            	sudo sed -i '/#connexions/ a\if [ \"x$SSID\" = \"x'$box'\" ]' hosts.sh 
-            	sleep 1
-            	echo -e "\033[32mVos réseaux ont bien été enregistrés \n"
-
-        	fi
+      #construction de la commande sed pour générer le if du script hosts.sh
+      ifClause="/#connexions/ a\if "
+      #pour chaque SSID contenu dans le tableau on rajoute une clause au if
+      for i in "${!tableau_box[@]}"; do
+          ifClause+="[ \"x\$SSID\" = \"x${tableau_box[i]}\" ]"
+          if [ "${tableau_box[i]}" != "${tableau_box[-1]}" ]; then
+            ifClause+=' || '
+          fi
+      done
+      # on integre dans le if les SSID indiqués
+      sudo sed -i "$ifClause" testhosts.sh
+      sleep 1
+      echo -e "\033[32mVos réseaux ont bien été enregistrés \n"
 
 
-
-	else
-    		echo -e "Aucune interface wifi sur cet appareil \n"
-
-	fi
 }
 #fin de fonction do_wifi
 
@@ -68,14 +59,7 @@ do_wifi() {
 
 do_eth() {
 
-	sleep 1
-	#integrer l'interface filaire pour les cas de connexions filaires
-	echo -e "\033[33mSouhaitez vous enregistrer votre interface filaire ? o/n" 
-	echo -e "(vous aurez besoin d'être connecté via un cable reseau)\033[0m"
 
-	read -r oui1
-
-	if [ "x$oui1" = "xo" ]; then
     		echo -e "\033[31m2/ENREGISTREMENT DE LA CONNEXION FILAIRE \n"
     		sleep 1
 
@@ -103,7 +87,7 @@ do_eth() {
           		echo -e "\033[32mParametrage de la connexion filaire terminé \n"
 
         	fi
-	fi
+
 
 
 }
@@ -219,34 +203,40 @@ sudo chmod 0777 hosts.sh
 #Renseigner les ssid des reseaux préférés afin de rendre le script facilement utilisable au départ
 echo -e "\033[31m1/ ENREGISTREMENT DES RESEAUX WIFI PREFERES"
 sleep 1
-echo -e "\033[32mVous pouvez enregistrer jusqu'à 2 SSID wifi que vous utilisez regulierement \n"
+echo -e "\033[32mVous pouvez enregistrer tous les SSID wifi que vous utilisez regulierement \n"
 sleep 1
-echo -e "Ci-dessous les réseaux disponibles actuellement \n"
+echo -e "Recherche des réseaux disponibles actuellement \n"
 sleep 1
-
-
-
 
 nmcli dev wifi list &> .nm.log
 sudo iwlists scan &> .iw.log
+#recuperation des derniers caractere des sorties des commandes précédentes.
 nm=$(< .nm.log sed 's/.* //')
 iw=$(< .iw.log sed 's/.* //')
-
+#si dernier caractere est 'introuvable' ou 'found'
 if [ "x$nm" = "xintrouvable" ] || [ "x$nm" = "xfound" ];then
 
     case "x$iw" in
+        #si la sortie de la commande iwlist est not found ou introuvable
         "xintrouvable" | "xfound")
-
-        echo -e "\033[31mcertaines dépendances ne sont pas satisfaites \nl'installation necessite le paquet network-manager ou wireless-tools \n" ;;
-
+            echo -e "\033[31mcertaines dépendances ne sont pas satisfaites \nLa recherche des SSID necessite le paquet network-manager ou wireless-tools \n"
+            echo -e "\033[32mVous pouvez néanmoins renseigner des SSID manuellement \n"
+            #on execute tout de meme do_wifi pour permettre l'enregistrement manuel des reseaux
+            do_wifi
+            ;;
+        #sinon
         *)
-
-        sudo iwlist scan 2> /dev/null | grep ESSID | cut -d : -f 2
-        do_wifi ;;
+            sudo iwlist scan 2> /dev/null | grep ESSID | cut -d : -f 2
+            #check si interface wifi existe
+            wifi=$(sudo iwconfig 2>/dev/null | grep 802.11 | cut -f1 -d' ')
+            if [ -z "$wifi" ]; then
+              echo -e "Aucune interface wifi sur cet appareil \n"
+              echo -e "\033[31mVous pouvez néanmoins renseigner des SSID manuellement \n"
+            fi
+            do_wifi
+            ;;
 
     esac
-
-
 else
 
     nmcli dev wifi list
@@ -261,18 +251,25 @@ sudo rm .nm.log 2> /dev/null
 
 
 
+sleep 1
+#integrer l'interface filaire pour les cas de connexions filaires
+echo -e "\033[33mSouhaitez vous enregistrer votre interface filaire ? o/n"
+echo -e "(vous aurez besoin d'être connecté via un cable reseau)\033[0m"
+read -r oui1
 
-sudo mii-tool &> .cab.log
-cab=$(< .cab.log sed 's/.* //')
+if [ "x$oui1" = "xo" ]; then
+    sudo mii-tool &> .cab.log
+    cab=$(< .cab.log sed 's/.* //')
 
-if [ "x$cab" = "xintrouvable" ] || [ "x$cab" = "xfound" ];then
+    if [ "x$cab" = "xintrouvable" ] || [ "x$cab" = "xfound" ];then
 
-    echo -e "\033[31mcertaines dépendances ne sont pas satisfaites \nle paramétrage de la liaison filaire necessite le paquet ethtool ou net-tools \n\033[0m"
+        echo -e "\033[31mcertaines dépendances ne sont pas satisfaites \nle paramétrage de la liaison filaire necessite le paquet ethtool ou net-tools \n\033[0m"
 
-else
+    else
 
-    do_eth
+        do_eth
 
+    fi
 fi
 
 
