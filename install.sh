@@ -4,11 +4,11 @@
 do_wifi() {
       sleep 1
       # recherche dans host.sh la ligne de if contenant les ssid
-      line0=$(sudo cat testhosts.sh | grep -o -n "SSID\" = " | cut -d : -f 1 | uniq)
+      line0=$(sudo cat hosts.sh | grep -o -n "SSID\" = " | cut -d : -f 1 | uniq)
 
       #suppression de la ligne
       if [ "$line0" != "" ]; then
-          sudo sed -i "$line0"'d' testhosts.sh
+          sudo sed -i "$line0"'d' hosts.sh
       fi
 
       #tableazu des SSID
@@ -43,7 +43,7 @@ do_wifi() {
           fi
       done
       # on integre dans le if les SSID indiqués
-      sudo sed -i "$ifClause" testhosts.sh
+      sudo sed -i "$ifClause" hosts.sh
       sleep 1
       echo -e "\033[32mVos réseaux ont bien été enregistrés \n"
 
