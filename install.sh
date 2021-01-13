@@ -105,17 +105,17 @@ do_couple() {
 	sleep 1
 	echo -e "\033[32mVous pouvez renseigner autant de couples IP/DOMAINE que desiré \n"
 
+	#suppression des lignes existentes entre les balises couplesdebut et couplesfin
+  sudo sed -i '/#couplesdebut/,/#couplesfin/d' hosts.sh
+  #recréation des balises
+  sudo sed -i '/#couples/ a\#couplesdebut' hosts.sh
+  sudo sed -i '/#couplesdebut/ a\#couplesfin' hosts.sh
+
 	#Tant qu'on desire ajouter des couples on rempli le fichier hosts.sh
   while [ "x$oui0" != "xn" ]; do
 
       oui0="o"
-
       if [ "x$oui0" = "xo" ]; then
-          #suppression des lignes existentes entre les balises couplesdebut et couplesfin
-    		  sudo sed -i '/#couplesdebut/,/#couplesfin/d' hosts.sh
-    		  #recréation des balises
-    		  sudo sed -i '/#couples/ a\#couplesdebut' hosts.sh
-    		  sudo sed -i '/#couplesdebut/ a\#couplesfin' hosts.sh
           sleep 1
           #enregistrement du couple
 	        echo -e "\033[33mIndiquer une IP Locale\033[0m"
